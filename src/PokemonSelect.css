@@ -1,0 +1,7 @@
+.pokemonSelection {
+     border: 1px solid blue;
+     padding: 10px;
+} 
+.pokemonSelection--option {
+     border: 1px solid red;
+}

@@ -30,3 +30,13 @@
     transform: rotate(360deg);
   }
 }
+
+.battleStage {
+  border: 3px solid green;
+}
+
+.playerStage, 
+.cpuStage {
+  border: 1px solid red;
+  margin: 10px;
+}
