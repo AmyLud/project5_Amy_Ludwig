@@ -3,7 +3,14 @@ import PlayerStage from './PlayerStage';
 import CpuStage from './CpuStage';
 
 class Battlestage extends Component {
+
+     // componentDidMount(){
+     //      // this.props.checkWinLose();
+
+     // }
+
      
+
 
      render(){
           return(
@@ -28,7 +35,8 @@ class Battlestage extends Component {
                     cpuHp={this.props.cpuHp} 
                     cpuPower={this.props.cpuPower}
                     attackExecuted={this.props.attackExecuted}
-                    narrationPanel={this.props.narrationPanel}/>
+                    narrationPanel={this.props.narrationPanel}
+                    playerTurn={this.props.playerTurn}/>
 
                </div>
           )

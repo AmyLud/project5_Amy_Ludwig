@@ -13,7 +13,9 @@ class PlayerStage extends Component {
      // componentDidMount(){
 
      // }
-
+     isNotMyTurn = ()=>{
+         return (this.props.playerTurn === false ? true : false);
+     }
 
 
      render(){
@@ -36,7 +38,7 @@ class PlayerStage extends Component {
                               {
                                    this.props.playerAttacks.map((attack)=>{
                                         return(
-                                             <button onClick={this.props.attackExecuted} key={attack.move.name} id={attack.move.name} value={this.props.playerPower} >
+                                             <button disabled={this.isNotMyTurn()} onClick={this.props.attackExecuted} key={attack.move.name} id={attack.move.name} value={this.props.playerPower} >
                                                   {attack.move.name}
                                              </button>
 
