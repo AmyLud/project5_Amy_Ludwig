@@ -1,0 +1,47 @@
+@-webkit-keyframes flash {
+	0% { opacity: 1; } 
+	25% { opacity: .5; } 
+	50% { opacity: 1; } 
+	75% { opacity: .5; } 
+	100% { opacity: 1; }
+}
+
+
+
+
+.animated {
+     -webkit-animation: flash linear .25s infinite;
+	animation: flash linear 1s infinite;
+}
+
+html {
+     overflow: hidden;
+}
+
+
+@-webkit-keyframes enemyAppears {
+     0% { 
+          transform: translateX(-100%);
+     } 
+     100% { 
+          transform: translateX(0);
+
+     } 
+}
+@-webkit-keyframes playerAppears {
+     0% { 
+          transform: translateX(100%);
+     } 
+     100% { 
+          transform: translateX(0);
+
+     } 
+}
+
+.cpuStage {
+     animation: enemyAppears 1s linear; 
+}
+
+.playerInfo {
+     animation: playerAppears 1s linear;
+}

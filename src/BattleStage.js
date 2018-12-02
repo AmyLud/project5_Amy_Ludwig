@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import PlayerStage from './PlayerStage';
 import CpuStage from './CpuStage';
+import './battleStage.css';
+import './healthbar.css';
 
-class Battlestage extends Component {
-
-     // componentDidMount(){
-     //      // this.props.checkWinLose();
-
-     // }
-
-     
-
-
+class Battlestage extends Component {     
      render(){
           return(
-               <div className="battleStage">
-                    <h2>BATTLE!</h2>
+               <section className="battleStage">
+                    <div className="wrapper">
                     
                     <CpuStage 
                     cpuChoice={this.props.cpuChoice} 
@@ -23,6 +16,9 @@ class Battlestage extends Component {
                     cpuHp={this.props.cpuHp} 
                     cpuPower={this.props.cpuPower}
                     attackExecuted={this.props.attackExecuted}
+                    cpuPic={this.props.cpuPic}
+                    percentCpuHp={this.props.percentCpuHp}
+                    cpuAnimated={this.props.cpuAnimated}
                     // narrationPanel={this.props.narrationPanel}
                     />
                     <PlayerStage 
@@ -36,9 +32,14 @@ class Battlestage extends Component {
                     cpuPower={this.props.cpuPower}
                     attackExecuted={this.props.attackExecuted}
                     narrationPanel={this.props.narrationPanel}
-                    playerTurn={this.props.playerTurn}/>
+                    playerTurn={this.props.playerTurn}
+                    playerPic={this.props.playerPic}
+                    percentPlayerHp={this.props.percentPlayerHp}
+                    playerAnimated={this.props.playerAnimated}/>
+                   
+                    </div>
 
-               </div>
+               </section>
           )
      }
 

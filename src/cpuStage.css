@@ -1,0 +1,36 @@
+
+
+
+.cpuActionBox--enemyPicture img {
+     max-width: 170px;
+     width: 100%;
+}
+
+.cpuActionBox--enemyInfo h3 {
+     margin-right: 25px;
+
+}
+
+
+.cpuActionBox {
+     /* border: 1px dashed black; */
+     display: flex;
+     justify-content: flex-end;
+}
+
+
+
+
+.cpuActionBox--enemyInfo {
+     flex: 1 0 20%;
+     padding: 0px;
+     text-align: right;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: flex-end;
+}
+.cpuActionBox--enemyPicture {
+     flex: 0 1 200px;
+     margin-left: 20px;
+}

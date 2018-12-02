@@ -1,0 +1,26 @@
+.playerImg img {
+     max-width: 200px;
+     width: 100%;
+}
+
+.playerStage {
+     /* border: 1px dashed black; */
+}
+
+.playerImg {
+     /* border: 1px dashed blue; */
+     margin-right: 20px;
+     flex: 0 1 200px;
+}
+
+
+.actionBox {
+     /* border: 1px dashed blue; */
+     flex: 1 0 20px;
+}
+
+.playerInfo {
+     display: flex;
+     align-items: flex-end;
+}
+

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import images from './images'
 import PokemonSelect from './PokemonSelect';
 import Battlestage from './BattleStage';
 import { shuffleArray, randomItem } from './FunkyFunctions';
@@ -22,31 +23,41 @@ class App extends Component {
     super();
     this.state = {
       playerPokemonIDs: [1, 4, 7, 25],
+      pokemonPics: images,
       playerPokemon: [], //List of options that can be chosen
-      cpuPokemonIDs: [19, 52, 41, 10],
+      cpuPokemonIDs: [19, 16, 41, 10],
       cpuPokemon: [], //List of options that can be chosen
-
+      
       //Player Pokemon choice, stats, moves
       playerChoice: {},
+      playerChoicePic: {},
       playerStats: [],
       playerMoves: [],
       playerAttacks: [],
       playerHp: undefined,
+      percentPlayerHp: 100,
       playerPower: undefined,
       playerUsed: "",
-
-
+      playerAnimated: false,
+      
+      
       //Cpu choice, stats, moves
       cpuChoice: {},
+      cpuChoicePic: {},
       cpuStats: [],
       cpuMoves: [],
       cpuAttacks: [],
       cpuHp: undefined,
+      percentCpuHp: 100,
       cpuPower: undefined,
       cpuUsed: "",
+      cpuAnimated: false,
+
+      //Stuff for tracking 
+      checkboxOptionSelected: undefined,
 
       //battle tracking states (turns, etc.)
-      playerTurn: true,
+      playerTurn: false,
       narrationPanel: "",
 
       //visibility states:
@@ -98,13 +109,13 @@ class App extends Component {
         });
     });
 
-    // this.checkWinLose()
-    // if (this.state.startGame === true && this.state.cpuHp <= "0"){
-    //   console.log("yay")
-    // }
 
   }  
+  //---------------------ON CECKBOX SELECTION---------------------
+  
+    // checkboxSelected = ()=> {
 
+    // }
 
   //---------------------ON SELECTION OF POKEMON---------------------
 
@@ -112,12 +123,21 @@ class App extends Component {
     //player selection
     const newPlayerPokemon = Array.from(this.state.playerPokemon);
     const newList = newPlayerPokemon.filter(pokemon => pokemon.id === Number(e.target.id))
+    const newPicList = Array.from(this.state.pokemonPics);
+    const newPic = newPicList.filter((img) => img.id === Number(e.target.id))
+
+
     //CPU selection
     const newcpuPokemon = Array.from(this.state.cpuPokemon);
     const newCpuChoice = randomItem(newcpuPokemon);
+
+
+
     //Set states
     this.setState({
+      checkboxOptionSelected: newList[0].id, 
       playerChoice: newList[0],
+      playerChoicePic: newPic[0].backURL,
       playerStats: newList[0].stats,
       playerMoves: newList[0].moves,
       cpuChoice: newCpuChoice,
@@ -125,6 +145,9 @@ class App extends Component {
       cpuStats: newCpuChoice.stats,
       startGame: true, //once option chosen, can't unchoose (radio bubble). good to show button.
     })
+
+   
+    
    
   }
 
@@ -146,11 +169,18 @@ class App extends Component {
     //give me stats for cpu
     const newCpuStats = Array.from(this.state.cpuStats);
     const cpuNeededStats = newCpuStats.slice(4);
+
+    const cpuPicList = Array.from(this.state.pokemonPics);
+    const cpuPic = cpuPicList.filter((img) => img.id === Number(this.state.cpuChoice.id))
+
+
     //set states
-    this.setState({
+    this.setState({ 
+      cpuChoicePic: cpuPic[0].frontURL,
       playerAttacks: newAttacks,
       playerPower: Math.round((neededStats[0].base_stat)/10),
       playerHp: neededStats[1].base_stat,
+      // percentPlayerHp: 
       cpuAttacks: newcpuAttacks,
       cpuPower: Math.round((cpuNeededStats[0].base_stat)/10),
       cpuHp: cpuNeededStats[1].base_stat,
@@ -159,6 +189,12 @@ class App extends Component {
       gameSetup: false,
 
     })
+
+    setTimeout(()=> {
+      this.setState({
+        playerTurn: true,
+      })
+    }, 3000)
 //once state for these things are set, we can start the game
   }
   
@@ -166,32 +202,52 @@ class App extends Component {
 
   attackExecuted = (e)=>{
 
-      this.setState({
-        playerTurn: false,
-      })
-      // give me a random number out of 1, 0 and -1. this will help it appear as though it's more dynamic. always having the same hits isn't very fun
-      let makeItLookRandom = Math.floor(Math.random() * 2);
-      if (makeItLookRandom !== 0) {
-        makeItLookRandom *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;}
-        const dynamicAttackPower = Number(e.target.value) + Number(makeItLookRandom);
+    // what cpuhp is right now
+    // figure out the attacks power
+    let makeItLookRandom = Math.floor(Math.random() * 3);
+    if (makeItLookRandom !== 0) {
+      makeItLookRandom *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;}
+      const dynamicAttackPower = Number(e.target.value) + Number(makeItLookRandom);
+      console.log(dynamicAttackPower)
 
+    // compare the power to the cpuhp 
+      if (this.state.cpuHp - Number(dynamicAttackPower) <= 0) {
 
-      //make it say stuff lol
-      this.setState({
-        playerUsed: e.target.id,
-        cpuHp: this.state.cpuHp - (dynamicAttackPower)
-      })
-      //set up narration for 
-      if (this.state.playerTurn === true){
         this.setState({
-          narrationPanel: `${this.state.playerChoice.name} has used ${e.target.id}!`
+          gameWon: true,
+          battleComplete: true,
+          gameinProgress: false,
         })
-      } 
+      }   else {
+        this.setState({
+          playerTurn: false,
+        })
+  
+        this.setState({
+          cpuAnimated: true,
+          playerUsed: e.target.id,
+          cpuHp: this.state.cpuHp - (dynamicAttackPower),
+          percentCpuHp: Math.round(((this.state.cpuHp - (dynamicAttackPower)) /  this.state.cpuChoice.stats[5].base_stat)*100),
+          
+        })
 
+        setTimeout(()=>{
+          this.setState({
+            cpuAnimated: false,
 
-      this.delay(); 
-      
+          })
+        }, 2500)
 
+        //set up narration for 
+        if (this.state.playerTurn === true){
+          this.setState({
+            narrationPanel: Number(makeItLookRandom) === 2 ? `${this.state.playerChoice.name} has used ${e.target.id}! It's super affective!` : `${this.state.playerChoice.name} has used ${e.target.id}!`
+          })
+        } 
+        
+        this.delay();
+
+      }
 
   }
 
@@ -201,41 +257,63 @@ delay = () => {
   setTimeout(() => {
     this.cpuAttack()
 
-  }, 2000);
+  }, 3500);
   
 }
 
 cpuAttack= ()=>{
-  
+
+
   const cpuAttackChoice = randomItem(this.state.cpuAttacks);
   const cpuAttackChoiceName = cpuAttackChoice.move.name;
-  let makeItLookRandom = Math.floor(Math.random() * 2);
+  let makeItLookRandom = Math.floor(Math.random() * 3);
   if (makeItLookRandom !== 0) {
     makeItLookRandom *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
   }
   const dynamicAttackPower = Number(this.state.cpuPower) + Number(makeItLookRandom);
 
+
+
+  if (this.state.playerHp - dynamicAttackPower <= 0) {
+      this.setState({
+      gameWon: false,
+      battleComplete: true,
+      gameinProgress: false,
+    })
+  }
   this.setState({
-    narrationPanel: `${this.state.cpuChoice.name} has used ${cpuAttackChoiceName}!`,
+    playerAnimated: true,
+    narrationPanel: Number(makeItLookRandom) === 2 ? `${this.state.cpuChoice.name} has used ${cpuAttackChoiceName}! It's super affective!`:`${this.state.cpuChoice.name} has used ${cpuAttackChoiceName}!`,
     playerHp: this.state.playerHp - dynamicAttackPower,
+    percentPlayerHp: Math.round(((this.state.playerHp - dynamicAttackPower) / this.state.playerChoice.stats[5].base_stat) * 100),
   })
 
   //let player go after 1.5 seconds
   setTimeout(() => {
     this.setState({
+      playerAnimated: false,
+    })
+  }, 2000);
+  setTimeout(() => {
+    this.setState({
       playerTurn: true,
     })
-  }, 1500);
+  }, 2500);
+
+  
 
 }
 
 //---------------------RESET GAME FUNCTION---------------------
 
   returnToStart = ()=>{
-    console.log("RESTARTED")
     this.setState({
+      percentCpuHp: 100,
+      percentPlayerHp: 100,
+      checkboxOptionSelected: undefined,
       playerChoice: {},
       cpuChoice: {},
+      playerTurn: false,
       startGame: false, //controls start game button showing. will not show if no option selected
       gameSetup: true, //controls pokemon selection panel
       gameinProgress: false, //controls battlestage 
@@ -244,39 +322,27 @@ cpuAttack= ()=>{
     })
   }
 
- //---------------------IF HP OF PLAYER OR CPU IS 0---------------------
-
-  checkWinLose = () => {
-    if (this.state.gameinProgress === true && Number(this.state.cpuHp) <= 0) {
-      console.log("you win!")
-    } else if (this.state.gameinProgress === true && Number(this.state.playerHp) <= 0){
-      console.log("you lose!")
-    }
-  }
-
-
-
-componentDidUpdate(){
-
-    this.checkWinLose();
-
-}
 
 //---------------------HERE IS MY RENDER:---------------------
   render() {
+    // this.checkWinLose();
     return (
       <div className="App">
-        <h1>Pokeman lulz</h1>
+      <div className="headerBar">
+          <h1>Poké-Gym</h1>
+
+      </div>
 
        { this.state.gameSetup === true ?
           <PokemonSelect 
         passAllValues={this.passValues} 
         setSelections={this.setSelections}
         playerPokemon={this.state.playerPokemon} 
-        startGame={this.state.startGame}/> : null}
+        startGame={this.state.startGame}
+        playerPokemonPics={this.state.pokemonPics}
+        checkboxOptionSelected={this.state.checkboxOptionSelected}/> : null}
 
       { this.state.gameinProgress === true ?
-      
       <Battlestage  
       playerChoice={this.state.playerChoice} 
       playerAttacks={this.state.playerAttacks} 
@@ -289,17 +355,22 @@ componentDidUpdate(){
       attackExecuted={this.attackExecuted}
       narrationPanel={this.state.narrationPanel}
       playerTurn={this.state.playerTurn} 
-      checkWinLose={this.state.checkWinLose}/> : null} 
+      playerPic={this.state.playerChoicePic}
+      cpuPic={this.state.cpuChoicePic}
+      percentCpuHp={this.state.percentCpuHp}
+      percentPlayerHp={this.state.percentPlayerHp}
+      playerAnimated={this.state.playerAnimated}
+      cpuAnimated={this.state.cpuAnimated}
+      /> : null} 
    
 
         { this.state.battleComplete === true ?
-        
         <WinLose 
         cpuChoice={this.state.cpuChoice} 
         playerChoice={this.state.playerChoice} 
-        playerHp={this.state.playerHp} 
-        cpuHp={this.state.cpuHp} 
+        gameWon={this.state.gameWon}
         returnToStart={this.returnToStart}
+        
         /> : null}
 
       </div>
