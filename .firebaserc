@@ -1,5 +1,6 @@
 {
   "projects": {
-    "live-project": "live-project-31ceb"
+    "live-project": "live-project-31ceb",
+    "default": "live-project-31ceb"
   }
 }
