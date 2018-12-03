@@ -40,6 +40,19 @@ ul {
   margin-top: 0;
 }
 
+.volumeButton {
+  background: transparent;
+  border:none;
+  width: 70px;
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+
+.volumeButton img {
+  width: 90%;
+}
+
 .App {
   /* margin: 1px; */
 }
@@ -75,6 +88,12 @@ ul {
 } */
 
 @media (max-width: 575px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .volumeButton {
+        width: 60px;
+      }
      .wrapper {
           width: 97%;
      }

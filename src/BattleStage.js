@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Sound from 'react-sound';
+
 import PlayerStage from './PlayerStage';
 import CpuStage from './CpuStage';
 import './battleStage.css';
@@ -7,7 +9,9 @@ import './healthbar.css';
 class Battlestage extends Component {     
      render(){
           return(
+
                <section className="battleStage">
+                    {this.props.soundOn === true ? <Sound url="./sound/battleSound.mp3" playStatus={Sound.status.PLAYING} loop={true} /> : null }
                     <div className="wrapper">
                     
                     <CpuStage 

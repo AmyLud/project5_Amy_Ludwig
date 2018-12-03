@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Sound from 'react-sound';
 import './PokemonSelect.css';
 
 
@@ -14,8 +15,9 @@ class PokemonSelect extends Component {
 
 
      render(){
-          return(
+          return ( 
                <section className="pokemonSelection">
+               { this.props.soundOn === true ? <Sound url="./sound/pokemonSelection.mp3" playStatus={Sound.status.PLAYING} loop={true}/> : null}
                     <div className="wrapper">
                          <h2>Choose your Pokemon!</h2>
                          <form action="#" onSubmit={this.props.passAllValues}>

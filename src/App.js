@@ -55,6 +55,7 @@ class App extends Component {
 
       //Stuff for tracking 
       checkboxOptionSelected: undefined,
+      soundOn: true,
 
       //battle tracking states (turns, etc.)
       playerTurn: false,
@@ -303,6 +304,14 @@ cpuAttack= ()=>{
   
 
 }
+//---------------------RESET GAME FUNCTION---------------------
+
+volumeAdjust = ()=>{
+  this.setState({
+    soundOn: !this.state.soundOn,
+  })
+}
+
 
 //---------------------RESET GAME FUNCTION---------------------
 
@@ -330,11 +339,13 @@ cpuAttack= ()=>{
       <div className="App">
       <div className="headerBar">
           <h1>Poké-Gym</h1>
+          <button onClick={this.volumeAdjust} className="volumeButton"><img src={this.state.soundOn === true ? "./assets/volume.png" : "./assets/noVolume.png"} alt="volume control"/></button>
 
       </div>
 
        { this.state.gameSetup === true ?
           <PokemonSelect 
+          soundOn={this.state.soundOn}
         passAllValues={this.passValues} 
         setSelections={this.setSelections}
         playerPokemon={this.state.playerPokemon} 
@@ -344,6 +355,7 @@ cpuAttack= ()=>{
 
       { this.state.gameinProgress === true ?
       <Battlestage  
+      soundOn={this.state.soundOn}
       playerChoice={this.state.playerChoice} 
       playerAttacks={this.state.playerAttacks} 
       playerHp={this.state.playerHp} 
@@ -366,6 +378,7 @@ cpuAttack= ()=>{
 
         { this.state.battleComplete === true ?
         <WinLose 
+        soundOn={this.state.soundOn}
         cpuChoice={this.state.cpuChoice} 
         playerChoice={this.state.playerChoice} 
         gameWon={this.state.gameWon}
